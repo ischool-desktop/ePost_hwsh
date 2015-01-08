@@ -316,9 +316,13 @@ namespace SH_SemesterScoreReport_hwsh
                 table.Columns.Add("本學期服務學習時數");
                 table.Columns.Add("學年服務學習時數");
 
+               // 惠文自訂 缺曠規則
+                List<string> ATTypeList = Utility.GetATTypeList();
+
                 // 缺曠統計
                 // 動態新增缺曠統計，使用模式一般_曠課、一般_事假..
-                foreach (string name in Utility.GetATMappingKey())
+                //foreach (string name in Utility.GetATMappingKey())
+                foreach (string name in ATTypeList)
                 {
                     table.Columns.Add("前學期" + name);
                     table.Columns.Add("本學期" + name);
@@ -479,6 +483,9 @@ namespace SH_SemesterScoreReport_hwsh
 
                                 document = temp.Clone();
                                 document.MailMerge.Execute(dt);
+                                document.MailMerge.RemoveEmptyParagraphs = true;
+                                document.MailMerge.DeleteFields();
+
                                 document.Save(folderPath + "\\" + inputReportName + "_" + className + ".doc", Aspose.Words.SaveFormat.Doc);
                                 dt.Clear();
                                 list.Clear();
@@ -817,7 +824,7 @@ namespace SH_SemesterScoreReport_hwsh
                         _dtEpost.Columns.Add("CN");
                         _dtEpost.Columns.Add("POSTALCODE");
                         _dtEpost.Columns.Add("POSTALADDRESS");
-                        _dtEpost.Columns.Add("學年度");
+                        _dtEpost.Columns.Add("學年");
                         _dtEpost.Columns.Add("學期");
                         _dtEpost.Columns.Add("班級");
                         _dtEpost.Columns.Add("座號");
@@ -833,43 +840,69 @@ namespace SH_SemesterScoreReport_hwsh
                             _dtEpost.Columns.Add("備註" + subjectIndex);
                         }
 
-                        _dtEpost.Columns.Add("學業成績");
-                        _dtEpost.Columns.Add("實習成績");
-                        _dtEpost.Columns.Add("總成績名次");
-                        _dtEpost.Columns.Add("取得學分");
+                        _dtEpost.Columns.Add("修習學分");
+                        _dtEpost.Columns.Add("實得學分");
                         _dtEpost.Columns.Add("累計學分");
-                        _dtEpost.Columns.Add("大功");
-                        _dtEpost.Columns.Add("小功");
+                        _dtEpost.Columns.Add("加權總分");
+                        _dtEpost.Columns.Add("平均分數");
+                        _dtEpost.Columns.Add("班級名次");
+                        _dtEpost.Columns.Add("班級人數");
+                        _dtEpost.Columns.Add("類組名次");
+                        _dtEpost.Columns.Add("類組人數");
                         _dtEpost.Columns.Add("嘉獎");
-                        _dtEpost.Columns.Add("大過");
-                        _dtEpost.Columns.Add("小過");
+                        _dtEpost.Columns.Add("小功");
+                        _dtEpost.Columns.Add("大功");
                         _dtEpost.Columns.Add("警告");
+                        _dtEpost.Columns.Add("小過");
+                        _dtEpost.Columns.Add("大過");
                         _dtEpost.Columns.Add("留校察看");
+
+                        foreach (string str in ATTypeList)
+                            _dtEpost.Columns.Add(str);
+
+                        _dtEpost.Columns.Add("日常行為表現");
+                        _dtEpost.Columns.Add("團體活動表現");
+                        _dtEpost.Columns.Add("公共服務");
+                        _dtEpost.Columns.Add("校外特殊表現");
+                        _dtEpost.Columns.Add("HQ");
+                        _dtEpost.Columns.Add("IQ");
+                        _dtEpost.Columns.Add("MQ");
+                        _dtEpost.Columns.Add("EQ");
+                        _dtEpost.Columns.Add("導師評語");
+
 
 
                         // 固定會對照
                         Dictionary<string, string> eKeyValDict = new Dictionary<string, string>();
                         eKeyValDict.Add("收件人", "CN");
-                        eKeyValDict.Add("學年度", "學年度");
+                        eKeyValDict.Add("學年度", "學年");
                         eKeyValDict.Add("學期", "學期");
                         eKeyValDict.Add("班級", "班級");
                         eKeyValDict.Add("座號", "座號");
                         eKeyValDict.Add("學號", "學號");
-                        eKeyValDict.Add("姓名", "姓名");
-                        eKeyValDict.Add("學期學業成績", "學業成績");
-                        eKeyValDict.Add("學期實習科目成績", "實習成績");
+                        eKeyValDict.Add("姓名", "姓名");                                                
                         eKeyValDict.Add("本學期修習學分數", "修習學分");
-                        eKeyValDict.Add("本學期取得學分數", "取得學分");
+                        eKeyValDict.Add("本學期取得學分數", "實得學分");
                         eKeyValDict.Add("累計取得學分數", "累計學分");
+                        eKeyValDict.Add("加權總分", "加權總分");
+                        eKeyValDict.Add("加權平均", "平均分數");
+                        eKeyValDict.Add("加權總分班排名", "班級名次");
+                        eKeyValDict.Add("加權總分班排名母數", "班級人數");
+                        eKeyValDict.Add("類別1加權總分排名", "類組名次");
+                        eKeyValDict.Add("類別1加權總分排名母數", "類組人數");
+
                         eKeyValDict.Add("大功統計", "大功");
                         eKeyValDict.Add("小功統計", "小功");
                         eKeyValDict.Add("嘉獎統計", "嘉獎");
                         eKeyValDict.Add("大過統計", "大過");
                         eKeyValDict.Add("小過統計", "小過");
                         eKeyValDict.Add("警告統計", "警告");
-                        eKeyValDict.Add("留校察看", "留校察看");
-                        eKeyValDict.Add("班導師", "導師姓名");
+                        eKeyValDict.Add("留校察看", "留校察看");                        
                         eKeyValDict.Add("導師評語", "導師評語");
+
+                        // 缺曠對照
+                        foreach (string str in ATTypeList)
+                            eKeyValDict.Add("本學期" + str, str);
 
                         // 綜合評語
                         List<string> CommList = new List<string>();
@@ -895,50 +928,51 @@ namespace SH_SemesterScoreReport_hwsh
                                 eKeyValDict.Add(f1, face);
                         }
                         #endregion
-                        #region 缺曠對照表
-                        List<K12.Data.PeriodMappingInfo> periodMappingInfos = K12.Data.PeriodMapping.SelectAll();
-                        Dictionary<string, string> dicPeriodMappingType = new Dictionary<string, string>();
-                        List<string> periodTypes = new List<string>();
-                        foreach (K12.Data.PeriodMappingInfo periodMappingInfo in periodMappingInfos)
-                        {
-                            if (!dicPeriodMappingType.ContainsKey(periodMappingInfo.Name))
-                                dicPeriodMappingType.Add(periodMappingInfo.Name, periodMappingInfo.Type);
+                        //#region 缺曠對照表
+                        //List<K12.Data.PeriodMappingInfo> periodMappingInfos = K12.Data.PeriodMapping.SelectAll();
+                        //Dictionary<string, string> dicPeriodMappingType = new Dictionary<string, string>();
+                        //List<string> periodTypes = new List<string>();
+                        //foreach (K12.Data.PeriodMappingInfo periodMappingInfo in periodMappingInfos)
+                        //{
+                        //    if (!dicPeriodMappingType.ContainsKey(periodMappingInfo.Name))
+                        //        dicPeriodMappingType.Add(periodMappingInfo.Name, periodMappingInfo.Type);
 
-                            if (!periodTypes.Contains(periodMappingInfo.Type))
-                                periodTypes.Add(periodMappingInfo.Type);
-                        }
+                        //    if (!periodTypes.Contains(periodMappingInfo.Type))
+                        //        periodTypes.Add(periodMappingInfo.Type);
+                        //}
 
-                        int aidx = 1;
-                        foreach (var absence in K12.Data.AbsenceMapping.SelectAll())
-                        {
-                            foreach (var pt in periodTypes)
-                            {
-                                string attendanceKey = pt + "_" + absence.Name;
-                                if (!table.Columns.Contains(attendanceKey))
-                                {
-                                    table.Columns.Add(attendanceKey);
-                                }
+                        //int aidx = 1;
+                        //foreach (var absence in K12.Data.AbsenceMapping.SelectAll())
+                        //{
+                        //    foreach (var pt in periodTypes)
+                        //    {
+                        //        string attendanceKey = pt + "_" + absence.Name;
+                        //        if (!table.Columns.Contains(attendanceKey))
+                        //        {
+                        //            table.Columns.Add(attendanceKey);
+                        //        }
 
-                                if (pt == "一般")
-                                    aidx = 1;
-                                else
-                                    aidx = 2;
+                        //        if (pt == "一般")
+                        //            aidx = 1;
+                        //        else
+                        //            aidx = 2;
 
-                                string attendanceKey1 = absence.Name + aidx;
-                                if (!_dtEpost.Columns.Contains(attendanceKey1))
-                                    _dtEpost.Columns.Add(attendanceKey1);
+                        //        string attendanceKey1 = absence.Name + aidx;
+                        //        if (!_dtEpost.Columns.Contains(attendanceKey1))
+                        //            _dtEpost.Columns.Add(attendanceKey1);
 
-                                if (!eKeyValDict.ContainsKey(attendanceKey))
-                                    eKeyValDict.Add(attendanceKey, attendanceKey1);
-                            }
-                        }
+                        //        if (!eKeyValDict.ContainsKey(attendanceKey))
+                        //            eKeyValDict.Add(attendanceKey, attendanceKey1);
+                        //    }
+                        //}
+                        //#endregion
 
                         if (!_dtEpost.Columns.Contains("導師姓名"))
                             _dtEpost.Columns.Add("導師姓名");
                         if (!_dtEpost.Columns.Contains("導師評語"))
                             _dtEpost.Columns.Add("導師評語");
 
-                        #endregion
+                        
                         bkw.ReportProgress(3);
                         #region 整理學生住址
                         accessHelper.StudentHelper.FillContactInfo(studentRecords);
@@ -3361,28 +3395,28 @@ namespace SH_SemesterScoreReport_hwsh
                             row["警告統計"] = 警告 == 0 ? "" : ("" + 警告);
                             row["留校察看"] = 留校察看 ? "是" : "";
                             #endregion
-                            #region 缺曠統計
-                            Dictionary<string, int> 缺曠項目統計 = new Dictionary<string, int>();
-                            foreach (AttendanceInfo info in stuRec.AttendanceList)
-                            {
-                                if (("" + info.Semester) == conf.Semester && ("" + info.SchoolYear) == conf.SchoolYear)
-                                {
-                                    string infoType = "";
-                                    if (dicPeriodMappingType.ContainsKey(info.Period))
-                                        infoType = dicPeriodMappingType[info.Period];
-                                    else
-                                        infoType = "";
-                                    string attendanceKey = "" + infoType + "_" + info.Absence;
-                                    if (!缺曠項目統計.ContainsKey(attendanceKey))
-                                        缺曠項目統計.Add(attendanceKey, 0);
-                                    缺曠項目統計[attendanceKey]++;
-                                }
-                            }
-                            foreach (string attendanceKey in 缺曠項目統計.Keys)
-                            {
-                                row[attendanceKey] = 缺曠項目統計[attendanceKey] == 0 ? "" : ("" + 缺曠項目統計[attendanceKey]);
-                            }
-                            #endregion
+                            //#region 缺曠統計
+                            //Dictionary<string, int> 缺曠項目統計 = new Dictionary<string, int>();
+                            //foreach (AttendanceInfo info in stuRec.AttendanceList)
+                            //{
+                            //    if (("" + info.Semester) == conf.Semester && ("" + info.SchoolYear) == conf.SchoolYear)
+                            //    {
+                            //        string infoType = "";
+                            //        if (dicPeriodMappingType.ContainsKey(info.Period))
+                            //            infoType = dicPeriodMappingType[info.Period];
+                            //        else
+                            //            infoType = "";
+                            //        string attendanceKey = "" + infoType + "_" + info.Absence;
+                            //        if (!缺曠項目統計.ContainsKey(attendanceKey))
+                            //            缺曠項目統計.Add(attendanceKey, 0);
+                            //        缺曠項目統計[attendanceKey]++;
+                            //    }
+                            //}
+                            //foreach (string attendanceKey in 缺曠項目統計.Keys)
+                            //{
+                            //    row[attendanceKey] = 缺曠項目統計[attendanceKey] == 0 ? "" : ("" + 缺曠項目統計[attendanceKey]);
+                            //}
+                            //#endregion
                             #endregion
                             table.Rows.Add(row);
                             progressCount++;
@@ -3449,8 +3483,8 @@ namespace SH_SemesterScoreReport_hwsh
                             data["POSTALADDRESS"] = address;
 
 
-                            //data["總成績名次"] = dr["學期學業成績班排名"].ToString() + "/" + dr["學期學業成績班排名母數"].ToString();
-                            data["總成績名次"] = dr["學期學業成績班排名"].ToString();
+                            ////data["總成績名次"] = dr["學期學業成績班排名"].ToString() + "/" + dr["學期學業成績班排名母數"].ToString();
+                            //data["總成績名次"] = dr["學期學業成績班排名"].ToString();
 
                             // 處理固定對照
                             foreach (DataColumn dc in table.Columns)
@@ -3468,30 +3502,35 @@ namespace SH_SemesterScoreReport_hwsh
                                 {
                                     data["科目" + subjectIndex] = dr["科目名稱" + subjectIndex];
                                     data["學分" + subjectIndex] = dr["學分數" + subjectIndex];
-                                    data["成績" + subjectIndex] = dr["學期科目成績" + subjectIndex];
 
-                                    // 學期科目成績
-                                    decimal sc;
-                                    if (decimal.TryParse(dr["學期科目成績" + subjectIndex].ToString(), out sc))
-                                    {
-                                        // 小於及格標準
-                                        if (sc < scA)
-                                        {
-                                            // 可以補考,不可補考
-                                            if (sc >= scB)
-                                            {
-                                                data["備註" + subjectIndex] = "*";
-                                                // *
-                                                dr["學期科目可補考註記" + subjectIndex] = "\f";
-                                            }
-                                            else
-                                            {
-                                                data["備註" + subjectIndex] = "#";
-                                                // #
-                                                dr["學期科目不可補考註記" + subjectIndex] = "\f";
-                                            }
-                                        }
-                                    }
+                                    // 未取得學分epost成績加*
+                                    if (dr["科目取得學分" + subjectIndex].ToString() == "否")
+                                        data["成績" + subjectIndex] = "*"+dr["學期科目成績" + subjectIndex];
+                                    else
+                                        data["成績" + subjectIndex] = dr["學期科目成績" + subjectIndex];
+
+                                    //// 學期科目成績
+                                    //decimal sc;
+                                    //if (decimal.TryParse(dr["學期科目成績" + subjectIndex].ToString(), out sc))
+                                    //{
+                                    //    // 小於及格標準
+                                    //    if (sc < scA)
+                                    //    {
+                                    //        // 可以補考,不可補考
+                                    //        if (sc >= scB)
+                                    //        {
+                                    //            data["備註" + subjectIndex] = "*";
+                                    //            // *
+                                    //            dr["學期科目可補考註記" + subjectIndex] = "\f";
+                                    //        }
+                                    //        else
+                                    //        {
+                                    //            data["備註" + subjectIndex] = "#";
+                                    //            // #
+                                    //            dr["學期科目不可補考註記" + subjectIndex] = "\f";
+                                    //        }
+                                    //    }
+                                    //}
 
                                     //// 未取得學分
                                     //string strP = dr["科目取得學分"].ToString();
@@ -3499,7 +3538,7 @@ namespace SH_SemesterScoreReport_hwsh
                                     //    data["重修補考" + subjectIndex] = "#";
 
 
-                                    data["名次" + subjectIndex] = dr["學期科目班排名" + subjectIndex].ToString() + "/" + dr["學期科目班排名母數" + subjectIndex].ToString();
+                                    //data["名次" + subjectIndex] = dr["學期科目班排名" + subjectIndex].ToString() + "/" + dr["學期科目班排名母數" + subjectIndex].ToString();
                                     //data["名次" + subjectIndex] = dr["學期科目班排名" + subjectIndex].ToString();
                                 }
                             }

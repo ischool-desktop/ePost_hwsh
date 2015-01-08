@@ -211,8 +211,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\個人學期成績單樣板%28高中%29.doc" />
-    <None Include="Resources\個人學期成績單樣板.doc" />
+    <None Include="Resources\個人學期成績單_惠文高中.doc" />
     <None Include="Resources\是的我又用excel寫程式了.xlsx" />
     <None Include="Resources\歡樂的合併欄位總表.doc" />
   </ItemGroup>

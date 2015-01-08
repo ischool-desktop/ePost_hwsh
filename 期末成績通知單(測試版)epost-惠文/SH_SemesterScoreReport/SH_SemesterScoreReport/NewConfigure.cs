@@ -28,7 +28,7 @@ namespace SH_SemesterScoreReport_hwsh
         {
             if (checkBoxX1.Checked)
             {
-                Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.個人學期成績單樣板));
+                Template = new Aspose.Words.Document(new MemoryStream(Properties.Resources.個人學期成績單_惠文高中));
                 this.SubjectLimit = 30;
                 this.WithSchoolYearScore = true;
                 this.WithPrevSemesterScore = true;
@@ -40,7 +40,7 @@ namespace SH_SemesterScoreReport_hwsh
             {
                 OpenFileDialog dialog = new OpenFileDialog();
                 dialog.Title = "上傳樣板";
-                dialog.Filter = "Excel檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                dialog.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     try
@@ -133,7 +133,7 @@ namespace SH_SemesterScoreReport_hwsh
             {
                 //document.Save(path, Aspose.Words.SaveFormat.Doc);
                 System.IO.FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
-                stream.Write(Properties.Resources.個人學期成績單樣板, 0, Properties.Resources.個人學期成績單樣板.Length);
+                stream.Write(Properties.Resources.個人學期成績單_惠文高中, 0, Properties.Resources.個人學期成績單_惠文高中.Length);
                 stream.Flush();
                 stream.Close();
                 System.Diagnostics.Process.Start(path);
@@ -143,14 +143,14 @@ namespace SH_SemesterScoreReport_hwsh
                 System.Windows.Forms.SaveFileDialog sd = new System.Windows.Forms.SaveFileDialog();
                 sd.Title = "另存新檔";
                 sd.FileName = reportName + ".doc";
-                sd.Filter = "Excel檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                sd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
                 if (sd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     try
                     {
                         //document.Save(sd.FileName, Aspose.Words.SaveFormat.Doc);
                         System.IO.FileStream stream = new FileStream(sd.FileName, FileMode.Create, FileAccess.Write);
-                        stream.Write(Properties.Resources.個人學期成績單樣板, 0, Properties.Resources.個人學期成績單樣板.Length);
+                        stream.Write(Properties.Resources.個人學期成績單_惠文高中, 0, Properties.Resources.個人學期成績單_惠文高中.Length);
                         stream.Flush();
                         stream.Close();
 
@@ -204,14 +204,14 @@ namespace SH_SemesterScoreReport_hwsh
                 System.Windows.Forms.SaveFileDialog sd = new System.Windows.Forms.SaveFileDialog();
                 sd.Title = "另存新檔";
                 sd.FileName = reportName + ".doc";
-                sd.Filter = "Excel檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
+                sd.Filter = "Word檔案 (*.doc)|*.doc|所有檔案 (*.*)|*.*";
                 if (sd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     try
                     {
                         //document.Save(sd.FileName, Aspose.Words.SaveFormat.Doc);
                         System.IO.FileStream stream = new FileStream(sd.FileName, FileMode.Create, FileAccess.Write);
-                        stream.Write(Properties.Resources.個人學期成績單樣板, 0, Properties.Resources.個人學期成績單樣板.Length);
+                        stream.Write(Properties.Resources.個人學期成績單_惠文高中, 0, Properties.Resources.個人學期成績單_惠文高中.Length);
                         stream.Flush();
                         stream.Close();
 

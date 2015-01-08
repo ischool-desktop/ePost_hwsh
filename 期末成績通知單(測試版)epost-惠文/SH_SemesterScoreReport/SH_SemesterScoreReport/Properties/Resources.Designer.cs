@@ -63,19 +63,9 @@ namespace SH_SemesterScoreReport_hwsh.Properties {
         /// <summary>
         ///   查詢類型 System.Byte[] 的當地語系化資源。
         /// </summary>
-        internal static byte[] 個人學期成績單樣板 {
+        internal static byte[] 個人學期成績單_惠文高中 {
             get {
-                object obj = ResourceManager.GetObject("個人學期成績單樣板", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類型 System.Byte[] 的當地語系化資源。
-        /// </summary>
-        internal static byte[] 個人學期成績單樣板_高中_ {
-            get {
-                object obj = ResourceManager.GetObject("個人學期成績單樣板_高中_", resourceCulture);
+                object obj = ResourceManager.GetObject("個人學期成績單_惠文高中", resourceCulture);
                 return ((byte[])(obj));
             }
         }

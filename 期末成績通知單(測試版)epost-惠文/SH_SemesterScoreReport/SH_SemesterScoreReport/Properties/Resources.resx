@@ -118,11 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="個人學期成績單樣板" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\個人學期成績單樣板.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="個人學期成績單樣板_高中_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\個人學期成績單樣板(高中).doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="個人學期成績單_惠文高中" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\個人學期成績單_惠文高中.doc;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="是的我又用excel寫程式了" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\是的我又用excel寫程式了.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

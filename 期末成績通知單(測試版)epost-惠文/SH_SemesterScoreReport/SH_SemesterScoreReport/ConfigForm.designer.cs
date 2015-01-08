@@ -61,12 +61,12 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.labelX10 = new DevComponents.DotNetBar.LabelX();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.chkExportEPOST = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.btnSaveConfig = new DevComponents.DotNetBar.ButtonX();
             this.btnPrint = new DevComponents.DotNetBar.ButtonX();
             this.btnCancel = new DevComponents.DotNetBar.ButtonX();
             this.panel4 = new System.Windows.Forms.Panel();
             this.circularProgress1 = new DevComponents.DotNetBar.Controls.CircularProgress();
-            this.chkExportEPOST = new DevComponents.DotNetBar.Controls.CheckBoxX();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -306,7 +306,6 @@
             // 
             this.cboSchoolYear.DisplayMember = "Text";
             this.cboSchoolYear.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cboSchoolYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSchoolYear.FormattingEnabled = true;
             this.cboSchoolYear.ItemHeight = 19;
             this.cboSchoolYear.Location = new System.Drawing.Point(73, 79);
@@ -344,7 +343,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 509F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(784, 509);
             this.tableLayoutPanel1.TabIndex = 11;
             // 
@@ -570,6 +569,20 @@
             this.panel5.Size = new System.Drawing.Size(392, 41);
             this.panel5.TabIndex = 1;
             // 
+            // chkExportEPOST
+            // 
+            // 
+            // 
+            // 
+            this.chkExportEPOST.BackgroundStyle.Class = "";
+            this.chkExportEPOST.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
+            this.chkExportEPOST.Location = new System.Drawing.Point(13, 9);
+            this.chkExportEPOST.Name = "chkExportEPOST";
+            this.chkExportEPOST.Size = new System.Drawing.Size(100, 23);
+            this.chkExportEPOST.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
+            this.chkExportEPOST.TabIndex = 3;
+            this.chkExportEPOST.Text = "產生epost檔";
+            // 
             // btnSaveConfig
             // 
             this.btnSaveConfig.AccessibleRole = System.Windows.Forms.AccessibleRole.PushButton;
@@ -642,20 +655,6 @@
             this.circularProgress1.Size = new System.Drawing.Size(75, 75);
             this.circularProgress1.Style = DevComponents.DotNetBar.eDotNetBarStyle.Windows7;
             this.circularProgress1.TabIndex = 13;
-            // 
-            // chkExportEPOST
-            // 
-            // 
-            // 
-            // 
-            this.chkExportEPOST.BackgroundStyle.Class = "";
-            this.chkExportEPOST.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square;
-            this.chkExportEPOST.Location = new System.Drawing.Point(13, 9);
-            this.chkExportEPOST.Name = "chkExportEPOST";
-            this.chkExportEPOST.Size = new System.Drawing.Size(100, 23);
-            this.chkExportEPOST.Style = DevComponents.DotNetBar.eDotNetBarStyle.StyleManagerControlled;
-            this.chkExportEPOST.TabIndex = 3;
-            this.chkExportEPOST.Text = "產生epost檔";
             // 
             // ConfigForm
             // 

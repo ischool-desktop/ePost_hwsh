@@ -95,6 +95,8 @@ namespace SH_SemesterScoreReport_hwsh
                     PeriodMappingDict.Add(rec.Name, rec.Type);
             }
 
+            // 取得惠文高中特有缺曠
+            List<string> ATTypeList = GetATTypeList();
 
             List<AttendanceRecord> attendList = K12.Data.Attendance.SelectBySchoolYearAndSemester(StudRecordList, SchoolYear, Semester);
 
@@ -102,7 +104,12 @@ namespace SH_SemesterScoreReport_hwsh
             foreach (AttendanceRecord rec in attendList)
             {
                 if (!retVal.ContainsKey(rec.RefStudentID))
-                    retVal.Add(rec.RefStudentID, new Dictionary<string, int>());
+                {
+                    Dictionary<string, int> dict = new Dictionary<string, int>();
+                    foreach (string str in ATTypeList)
+                        dict.Add(str, 0);
+                    retVal.Add(rec.RefStudentID,dict);
+                }
 
                 foreach (AttendancePeriod per in rec.PeriodDetail)
                 {
@@ -112,14 +119,51 @@ namespace SH_SemesterScoreReport_hwsh
                     // ex.一般:曠課
                     string key = PeriodMappingDict[per.Period] + "_" + per.AbsenceType;
 
-                    if (!retVal[rec.RefStudentID].ContainsKey(key))
-                        retVal[rec.RefStudentID].Add(key, 0);
+                    // 缺曠轉換
+                    key = ATTypeParse(key);
 
-                    retVal[rec.RefStudentID][key]++;
+                    if (retVal[rec.RefStudentID].ContainsKey(key))                        
+                        retVal[rec.RefStudentID][key]++;
                 }
             }
 
             return retVal;
+        }
+
+        /// <summary>
+        /// 缺曠轉換
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private static string ATTypeParse(string key)
+        {
+            string retValue = "其他假";
+
+            if (key.Contains("事假"))
+                retValue = "事假";
+
+            if (key.Contains("病假"))
+                retValue = "病假";
+
+            if (key.Contains("公假"))
+                retValue = "公假";
+
+            if (key.Contains("喪假"))
+                retValue = "喪假";
+
+            if (key == "一般_曠課")
+                retValue = "曠課";
+
+            if (key == "一般_遲到")
+                retValue = "遲到";
+
+            if (key.Contains("曠課") || key.Contains("遲到"))
+            {
+                if (retValue!= "曠課" || retValue != "遲到")
+                    retValue = "升降旗";
+            }
+
+            return retValue;
         }
 
         /// <summary>
@@ -142,6 +186,8 @@ namespace SH_SemesterScoreReport_hwsh
                     PeriodMappingDict.Add(rec.Name, rec.Type);
             }
 
+            // 取得惠文高中特有缺曠
+            List<string> ATTypeList = GetATTypeList();
 
             List<AttendanceRecord> attendList = K12.Data.Attendance.SelectBySchoolYearAndSemester(StudRecordList, SchoolYear, null);
 
@@ -159,42 +205,18 @@ namespace SH_SemesterScoreReport_hwsh
                     // ex.一般:曠課
                     string key = PeriodMappingDict[per.Period] + "_" + per.AbsenceType;
 
-                    if (!retVal[rec.RefStudentID].ContainsKey(key))
-                        retVal[rec.RefStudentID].Add(key, 0);
+                    // 缺曠轉換
+                    key = ATTypeParse(key);
 
-                    retVal[rec.RefStudentID][key]++;
+                    if (retVal[rec.RefStudentID].ContainsKey(key))
+                        retVal[rec.RefStudentID][key]++;
                 }
             }
 
             return retVal;
         }
 
-        //public static void test()
-        //{
-        //    SmartSchool.Customization.Data.AccessHelper ac = new SmartSchool.Customization.Data.AccessHelper();
-        //    List<SmartSchool.Customization.Data.StudentRecord> listS = ac.StudentHelper.GetSelectedStudent();
-            
-        //     ac.StudentHelper.FillSemesterSubjectScore(true,listS);
-
-
-        //     SmartSchool.Evaluation.WearyDogComputer computer = new SmartSchool.Evaluation.WearyDogComputer();
-
-        //     computer.FillStudentGradCalcScore(ac, listS);
-        //     Dictionary<SmartSchool.Customization.Data.StudentRecord, List<string>> errormessages = computer.FillStudentGradCheck(ac, listS);
-
-        //     foreach (SmartSchool.Customization.Data.StudentRecord rec in listS)
-        //     {
-        //         foreach (SmartSchool.Customization.Data.StudentExtension.SemesterEntryScoreInfo se in rec.SemesterEntryScoreList)
-        //         { 
-                 
-        //         }
-                 
-        //     }
- 
-
-           
-           
-        //}
+      
 
 
         /// <summary>
@@ -648,5 +670,26 @@ namespace SH_SemesterScoreReport_hwsh
                 }
             }
         }
+
+
+        /// <summary>
+        /// 取得惠文高中缺曠
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetATTypeList()
+        {
+            List<string> ATTypeList = new List<string>();
+            ATTypeList.Add("升降旗");
+            ATTypeList.Add("遲到");
+            ATTypeList.Add("曠課");
+            ATTypeList.Add("事假");
+            ATTypeList.Add("病假");
+            ATTypeList.Add("公假");
+            ATTypeList.Add("喪假");
+            ATTypeList.Add("其他假");
+
+            return ATTypeList;
+        }
+             
     }
 }
