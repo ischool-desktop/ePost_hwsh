@@ -23,9 +23,8 @@ namespace SH_SemesterScoreReport_hwsh
             cat.Add(new FISCA.Permission.RibbonFeature("SHSchool.SH_hwSH_SemesterScoreReport_hwsh", "期末成績通知單(惠文)epost"));
 
             var btn = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["期末成績通知單(惠文)epost"];
-            btn.Enable = true;
-
-            //K12.Presentation.NLDPanels.Student.SelectedSourceChanged += delegate { btn.Enable = (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0) && FISCA.Permission.UserAcl.Current["SHSchool.SH_hwSH_SemesterScoreReport_hwsh"].Executable; };
+            //btn.Enable = true;
+            K12.Presentation.NLDPanels.Student.SelectedSourceChanged += delegate { btn.Enable = (K12.Presentation.NLDPanels.Student.SelectedSource.Count > 0) && FISCA.Permission.UserAcl.Current["SHSchool.SH_hwSH_SemesterScoreReport_hwsh"].Executable; };
             btn.Click += new EventHandler(Program_Click);
 
 
@@ -302,12 +301,18 @@ namespace SH_SemesterScoreReport_hwsh
                 table.Columns.Add("上學期健康與護理成績");
                 table.Columns.Add("上學期實習科目成績");
                 table.Columns.Add("上學期德行成績");
+                table.Columns.Add("上學期學業(原始)成績");
+                table.Columns.Add("上學期體育(原始)成績");
+                table.Columns.Add("上學期國防通識(原始)成績");
+                table.Columns.Add("上學期健康與護理(原始)成績");
+                table.Columns.Add("上學期實習科目(原始)成績");
                 // 學年分項成績 --
                 table.Columns.Add("學年學業成績");
                 table.Columns.Add("學年體育成績");
                 table.Columns.Add("學年國防通識成績");
                 table.Columns.Add("學年健康與護理成績");
                 table.Columns.Add("學年實習科目成績");
+                table.Columns.Add("學年專業科目成績");
                 table.Columns.Add("學年德行成績");
                 table.Columns.Add("學年學業成績班排名");
 
