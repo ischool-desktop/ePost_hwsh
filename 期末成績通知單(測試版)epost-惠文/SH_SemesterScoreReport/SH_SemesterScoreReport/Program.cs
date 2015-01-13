@@ -81,11 +81,15 @@ namespace SH_SemesterScoreReport_hwsh
         // 本學期修習
         static Dictionary<string, decimal> _studSumCreditDict1 = new Dictionary<string, decimal>();
 
+        // 本學期加權總分
+        static Dictionary<string, decimal> _studSumScoreDict1 = new Dictionary<string, decimal>();
+
         // 本學期取得
         static Dictionary<string, decimal> _studPassSumCreditDict1 = new Dictionary<string, decimal>();
         
         // 累計取得
         static Dictionary<string, decimal> _studPassSumCreditDictAll = new Dictionary<string, decimal>();
+
         static DataTable _dtEpost = new DataTable();
 
         static void Program_Click(object sender_, EventArgs e_)
@@ -260,6 +264,7 @@ namespace SH_SemesterScoreReport_hwsh
                 table.Columns.Add("平均全校排名");
                 table.Columns.Add("平均全校排名母數");
                 // 學期分項成績 --
+                table.Columns.Add("學期學業成績加權總分");
                 table.Columns.Add("學期學業成績");
                 table.Columns.Add("學期體育成績");
                 table.Columns.Add("學期國防通識成績");
@@ -320,6 +325,11 @@ namespace SH_SemesterScoreReport_hwsh
                 table.Columns.Add("前學期服務學習時數");
                 table.Columns.Add("本學期服務學習時數");
                 table.Columns.Add("學年服務學習時數");
+
+                table.Columns.Add("日常生活表現");
+                table.Columns.Add("團體活動表現");
+                table.Columns.Add("公共服務");
+                table.Columns.Add("校外特殊表現");
 
                // 惠文自訂 缺曠規則
                 List<string> ATTypeList = Utility.GetATTypeList();
@@ -841,8 +851,8 @@ namespace SH_SemesterScoreReport_hwsh
                             _dtEpost.Columns.Add("科目" + subjectIndex);
                             _dtEpost.Columns.Add("學分" + subjectIndex);
                             _dtEpost.Columns.Add("成績" + subjectIndex);
-                            _dtEpost.Columns.Add("名次" + subjectIndex);
-                            _dtEpost.Columns.Add("備註" + subjectIndex);
+                            //_dtEpost.Columns.Add("名次" + subjectIndex);
+                            //_dtEpost.Columns.Add("備註" + subjectIndex);
                         }
 
                         _dtEpost.Columns.Add("修習學分");
@@ -865,7 +875,7 @@ namespace SH_SemesterScoreReport_hwsh
                         foreach (string str in ATTypeList)
                             _dtEpost.Columns.Add(str);
 
-                        _dtEpost.Columns.Add("日常行為表現");
+                        _dtEpost.Columns.Add("日常生活表現");
                         _dtEpost.Columns.Add("團體活動表現");
                         _dtEpost.Columns.Add("公共服務");
                         _dtEpost.Columns.Add("校外特殊表現");
@@ -889,12 +899,12 @@ namespace SH_SemesterScoreReport_hwsh
                         eKeyValDict.Add("本學期修習學分數", "修習學分");
                         eKeyValDict.Add("本學期取得學分數", "實得學分");
                         eKeyValDict.Add("累計取得學分數", "累計學分");
-                        eKeyValDict.Add("加權總分", "加權總分");
-                        eKeyValDict.Add("加權平均", "平均分數");
-                        eKeyValDict.Add("加權總分班排名", "班級名次");
-                        eKeyValDict.Add("加權總分班排名母數", "班級人數");
-                        eKeyValDict.Add("類別1加權總分排名", "類組名次");
-                        eKeyValDict.Add("類別1加權總分排名母數", "類組人數");
+                        eKeyValDict.Add("學期學業成績加權總分", "加權總分");
+                        eKeyValDict.Add("學期學業成績", "平均分數");
+                        eKeyValDict.Add("學期學業成績班排名", "班級名次");
+                        eKeyValDict.Add("學期學業成績班排名母數", "班級人數");
+                        eKeyValDict.Add("學期學業成績類別1排名", "類組名次");
+                        eKeyValDict.Add("學期學業成績類別1排名母數", "類組人數");
 
                         eKeyValDict.Add("大功統計", "大功");
                         eKeyValDict.Add("小功統計", "小功");
@@ -913,6 +923,7 @@ namespace SH_SemesterScoreReport_hwsh
                         List<string> CommList = new List<string>();
 
                         #region 日常行為表現資料表
+                        
                         SmartSchool.Customization.Data.SystemInformation.getField("文字評量對照表");
                         foreach (System.Xml.XmlElement ele in (SmartSchool.Customization.Data.SystemInformation.Fields["文字評量對照表"] as System.Xml.XmlElement).SelectNodes("Content/Morality"))
                         {
@@ -972,8 +983,6 @@ namespace SH_SemesterScoreReport_hwsh
                         //}
                         //#endregion
 
-                        if (!_dtEpost.Columns.Contains("導師姓名"))
-                            _dtEpost.Columns.Add("導師姓名");
                         if (!_dtEpost.Columns.Contains("導師評語"))
                             _dtEpost.Columns.Add("導師評語");
 
@@ -1615,7 +1624,10 @@ namespace SH_SemesterScoreReport_hwsh
                             if (!_studSumCreditDict1.ContainsKey(stuRec.StudentID))
                                 _studSumCreditDict1.Add(stuRec.StudentID, 0);
 
-                            
+                            // 本學期加權總分
+                            if (!_studSumScoreDict1.ContainsKey(stuRec.StudentID))
+                                _studSumScoreDict1.Add(stuRec.StudentID, 0);
+
                             // 本學期取得學分數
                             if (!_studPassSumCreditDict1.ContainsKey(stuRec.StudentID))
                                 _studPassSumCreditDict1.Add(stuRec.StudentID, 0);
@@ -1923,15 +1935,20 @@ namespace SH_SemesterScoreReport_hwsh
 
 
                             // 處理本學期取得學分與累計取得學分
-                            foreach (var semesterSubjectScore in stuRec.SemesterSubjectScoreList)
+                            foreach ( SemesterSubjectScoreInfo_New semesterSubjectScore in stuRec.SemesterSubjectScoreList)
                             {
                                 if (semesterSubjectScore.Detail.GetAttribute("不計學分") != "是")
-                                {
+                                {                                 
 
                                     // 本學期取得修習
                                     if (semesterSubjectScore.SchoolYear.ToString() == conf.SchoolYear && semesterSubjectScore.Semester.ToString() == conf.Semester)
+                                    {
                                         _studSumCreditDict1[stuRec.StudentID] += semesterSubjectScore.CreditDec();
 
+                                        // 加權總分計算
+                                        decimal ss = semesterSubjectScore.CreditDec * semesterSubjectScore.Score;
+                                        _studSumScoreDict1[stuRec.StudentID] += ss;
+                                    }
 
                                     // 本學期取得
                                     if (semesterSubjectScore.SchoolYear.ToString() == conf.SchoolYear && semesterSubjectScore.Semester.ToString() == conf.Semester && semesterSubjectScore.Pass)
@@ -1946,6 +1963,7 @@ namespace SH_SemesterScoreReport_hwsh
                             row["本學期修習學分數"] = _studSumCreditDict1[stuRec.StudentID];
                             row["本學期取得學分數"] = _studPassSumCreditDict1[stuRec.StudentID];
                             row["累計取得學分數"] = _studPassSumCreditDictAll[stuRec.StudentID];
+                            row["學期學業成績加權總分"] = _studSumScoreDict1[stuRec.StudentID];
 
                             int subjectIndex = 1;
                             // 學期科目與定期評量
@@ -3357,11 +3375,23 @@ namespace SH_SemesterScoreReport_hwsh
                                     foreach (System.Xml.XmlElement each in xml.SelectNodes("TextScore/Morality"))
                                     {
                                         string face = each.GetAttribute("Face");
-                                        if ((SmartSchool.Customization.Data.SystemInformation.Fields["文字評量對照表"] as System.Xml.XmlElement).SelectSingleNode("Content/Morality[@Face='" + face + "']") != null)
-                                        {
-                                            string comment = each.InnerText;
-                                            row["綜合表現：" + face] = each.InnerText;
-                                        }
+                                        if(face=="日常生活表現")
+                                            row["日常生活表現"]=each.InnerText;
+
+                                        if(face=="團體活動表現")
+                                            row["團體活動表現"]=each.InnerText;
+    
+                                        if(face=="公共服務")
+                                        row["公共服務"]=each.InnerText;
+
+                                        if (face == "校外特殊表現")
+                                            row["校外特殊表現"] = each.InnerText;
+
+                                          if ((SmartSchool.Customization.Data.SystemInformation.Fields["文字評量對照表"] as System.Xml.XmlElement).SelectSingleNode("Content/Morality[@Face='" + face + "']") != null)
+                                                        {
+                                                            string comment = each.InnerText;
+                                                            row["綜合表現：" + face] = each.InnerText;
+                                                        }
                                     }
                                     break;
                                 }
@@ -3423,12 +3453,35 @@ namespace SH_SemesterScoreReport_hwsh
                             //}
                             //#endregion
                             #endregion
+
+                            // 因惠文特殊需求加工科目名稱內容 校部訂+科目名稱
+                            for (int sIndex = 1; sIndex <= conf.SubjectLimit; sIndex++)
+                            {
+                                if (row["科目名稱" + sIndex].ToString() != "")
+                                {
+                                    string subjName = "";
+                                    if (row["科目校部定" + sIndex].ToString() != "")
+                                        subjName += row["科目校部定" + sIndex].ToString().Substring(0, 1);
+
+                                    if (row["科目必選修" + sIndex].ToString() != "")
+                                        subjName += row["科目必選修" + sIndex].ToString().Substring(0, 1);
+
+                                    subjName += " " + row["科目名稱" + sIndex];
+
+                                    //換名
+                                    row["科目名稱" + sIndex] = subjName;
+                                }
+                            }                            
+
                             table.Rows.Add(row);
                             progressCount++;
                             bkw.ReportProgress(70 + progressCount * 20 / selectedStudents.Count);
                         }
                         #endregion
                         bkw.ReportProgress(90);
+
+                        table.TableName = "debug";
+                        table.WriteXml(Application.StartupPath + "\\debug1.xml");
 
                         // 取欄位用
                         //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\111.txt");
