@@ -1615,6 +1615,7 @@ namespace SH_SemesterScoreReport_hwsh
                         _studSumCreditDict1.Clear();
                         _studPassSumCreditDict1.Clear();
                         _studPassSumCreditDictAll.Clear();
+                        _studSumScoreDict1.Clear();
 
                         progressCount = 0;
                         #region 填入資料表
