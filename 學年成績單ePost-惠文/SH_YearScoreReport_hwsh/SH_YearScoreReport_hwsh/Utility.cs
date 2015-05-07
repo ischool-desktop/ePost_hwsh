@@ -96,13 +96,21 @@ namespace SH_YearScoreReport_hwsh
             }
 
 
+            // 取得惠文高中特有缺曠
+            List<string> ATTypeList = GetATTypeList();
+
             List<AttendanceRecord> attendList = K12.Data.Attendance.SelectBySchoolYearAndSemester(StudRecordList, SchoolYear, Semester);
 
             // 計算統計資料
             foreach (AttendanceRecord rec in attendList)
             {
                 if (!retVal.ContainsKey(rec.RefStudentID))
-                    retVal.Add(rec.RefStudentID, new Dictionary<string, int>());
+                {
+                    Dictionary<string, int> dict = new Dictionary<string, int>();
+                    foreach (string str in ATTypeList)
+                        dict.Add(str, 0);
+                    retVal.Add(rec.RefStudentID, dict);
+                }                    
 
                 foreach (AttendancePeriod per in rec.PeriodDetail)
                 {
@@ -111,6 +119,9 @@ namespace SH_YearScoreReport_hwsh
 
                     // ex.一般:曠課
                     string key = PeriodMappingDict[per.Period] + "_" + per.AbsenceType;
+
+                    // 缺曠轉換
+                    key = ATTypeParse(key);
 
                     if (!retVal[rec.RefStudentID].ContainsKey(key))
                         retVal[rec.RefStudentID].Add(key, 0);
@@ -151,8 +162,12 @@ namespace SH_YearScoreReport_hwsh
             foreach (AttendanceRecord rec in attendList)
             {
                 if (!retVal.ContainsKey(rec.RefStudentID))
-                    retVal.Add(rec.RefStudentID, new Dictionary<string, int>());
-
+                {
+                    Dictionary<string, int> dict = new Dictionary<string, int>();                    
+                    foreach (string str in ATTypeList)
+                        dict.Add(str, 0);
+                    retVal.Add(rec.RefStudentID, dict);
+                }
                 foreach (AttendancePeriod per in rec.PeriodDetail)
                 {
                     if (!PeriodMappingDict.ContainsKey(per.Period))
@@ -207,32 +222,7 @@ namespace SH_YearScoreReport_hwsh
 
             return retValue;
         }
-        //public static void test()
-        //{
-        //    SmartSchool.Customization.Data.AccessHelper ac = new SmartSchool.Customization.Data.AccessHelper();
-        //    List<SmartSchool.Customization.Data.StudentRecord> listS = ac.StudentHelper.GetSelectedStudent();
-
-        //     ac.StudentHelper.FillSemesterSubjectScore(true,listS);
-
-
-        //     SmartSchool.Evaluation.WearyDogComputer computer = new SmartSchool.Evaluation.WearyDogComputer();
-
-        //     computer.FillStudentGradCalcScore(ac, listS);
-        //     Dictionary<SmartSchool.Customization.Data.StudentRecord, List<string>> errormessages = computer.FillStudentGradCheck(ac, listS);
-
-        //     foreach (SmartSchool.Customization.Data.StudentRecord rec in listS)
-        //     {
-        //         foreach (SmartSchool.Customization.Data.StudentExtension.SemesterEntryScoreInfo se in rec.SemesterEntryScoreList)
-        //         { 
-
-        //         }
-
-        //     }
-
-
-
-
-        //}
+       
 
 
         /// <summary>
