@@ -1261,6 +1261,12 @@ namespace SH_YearScoreReport_hwsh
                             row["座號"] = stuRec.SeatNo;
                             row["學號"] = stuRec.StudentNumber;
                             row["姓名"] = stuRec.StudentName;
+                                                        
+                            foreach (SchoolYearEntryScoreInfo syes in stuRec.SchoolYearEntryScoreList)
+                            { 
+                                if(syes.Entry=="學業" && SchoolYear== syes.SchoolYear)
+                                    row["學業學年平均"]=syes.Score;
+                            }
 
                             int currentGradeYear = -1;
                             foreach (var semesterEntryScore in stuRec.SemesterEntryScoreList)
@@ -1833,14 +1839,17 @@ namespace SH_YearScoreReport_hwsh
 
                             #region 學業學年成績
                             // 學業學年成績處理，惠文客製：(第1學期學業成績+第2學期學業成績)/2
-                            decimal sed1=0, sed2=0;
-                            if (row["第1學期學業成績"] != null)
-                                decimal.TryParse(row["第1學期學業成績"].ToString(), out sed1);
+                            //decimal sed1=0, sed2=0;
+                            //if (row["第1學期學業成績"] != null)
+                            //    decimal.TryParse(row["第1學期學業成績"].ToString(), out sed1);
 
-                            if (row["第2學期學業成績"] != null)
-                                decimal.TryParse(row["第2學期學業成績"].ToString(), out sed2);
-
-                            row["學業學年平均"] = (sed1 + sed2) / 2;
+                            //if (row["第2學期學業成績"] != null)
+                            //    decimal.TryParse(row["第2學期學業成績"].ToString(), out sed2);
+                            
+                            //row["學業學年平均"] = (sed1 + sed2) / 2;
+                            
+                            
+                            
 
                             #endregion
 
@@ -1969,6 +1978,20 @@ namespace SH_YearScoreReport_hwsh
                                         }
                                     }
 
+                                    // 處理第2學期學分數
+                                    if (dr["第2學期學分數" + subjectIndex] == null)
+                                    {
+                                        dr["第2學期學分數" + subjectIndex] = dr["第1學期學分數" + subjectIndex];
+                                        data["第2學期學分數" + subjectIndex] = dr["第1學期學分數" + subjectIndex];
+                                    }
+                                    else
+                                    {
+                                        if (dr["第2學期學分數" + subjectIndex].ToString() == "")
+                                        {
+                                            dr["第2學期學分數" + subjectIndex] = dr["第1學期學分數" + subjectIndex];
+                                            data["第2學期學分數" + subjectIndex] = dr["第1學期學分數" + subjectIndex];
+                                        }
+                                    }
                                 }
                             }
 
@@ -2002,23 +2025,23 @@ namespace SH_YearScoreReport_hwsh
                         // 比對樣版欄位與合併欄位
 
 
-                        // debug ePost 內與樣版內欄位相同
-                        List<string> fieldList = new List<string>();
-                        foreach (DataColumn dc in _dtEpost.Columns)
-                            fieldList.Add(dc.ColumnName);
+                        //// debug ePost 內與樣版內欄位相同
+                        //List<string> fieldList = new List<string>();
+                        //foreach (DataColumn dc in _dtEpost.Columns)
+                        //    fieldList.Add(dc.ColumnName);
 
-                        StreamWriter sw = new StreamWriter(Application.StartupPath + "\\field.txt", false);
+                        //StreamWriter sw = new StreamWriter(Application.StartupPath + "\\field.txt", false);
 
-                        foreach (string str in conf.Template.MailMerge.GetFieldNames())
-                        {
-                            if (!fieldList.Contains(str))
-                                sw.WriteLine(str);
-                        }
-                        sw.Close();
+                        //foreach (string str in conf.Template.MailMerge.GetFieldNames())
+                        //{
+                        //    if (!fieldList.Contains(str))
+                        //        sw.WriteLine(str);
+                        //}
+                        //sw.Close();
 
-                        // debug
-                        _dtEpost.TableName = "epost";
-                        _dtEpost.WriteXml(Application.StartupPath + "\\學年成績testEpost.xml");
+                        //// debug
+                        //_dtEpost.TableName = "epost";
+                        //_dtEpost.WriteXml(Application.StartupPath + "\\學年成績testEpost.xml");
 
                     }
                     catch (Exception exception)
