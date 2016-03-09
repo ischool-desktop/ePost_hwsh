@@ -149,17 +149,16 @@ namespace SH_SemesterScoreReport_hwsh
                 retValue = "公假";
 
             if (key.Contains("喪假"))
-                retValue = "喪假";
+                retValue = "喪假";            
 
-            if (key == "一般_曠課")
-                retValue = "曠課";
-
-            if (key == "一般_遲到")
-                retValue = "遲到";
-
+            // 客製只有一般曠課、一般遲到才會記錄相對
             if (key.Contains("曠課") || key.Contains("遲到"))
             {
-                if (retValue!= "曠課" || retValue != "遲到")
+                if (key == "一般_曠課")
+                    retValue = "曠課";
+                else if(key == "一般_遲到")                                   
+                    retValue = "遲到";
+                else
                     retValue = "升降旗";
             }
 
